@@ -156,7 +156,7 @@ public class TextStringBuilder implements CharSequence, Appendable, Serializable
         @Override
         public long skip(long n) {
             if (pos + n > size()) {
-                n = size() - pos;
+                n = (long) size() - pos; // Cast "size()" to long for proper handling of long subtraction.
             }
             if (n < 0) {
                 return 0;
