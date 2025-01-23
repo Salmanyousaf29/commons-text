@@ -448,11 +448,20 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
     @Override
     public Object clone() {
         try {
-            return cloneReset();
-        } catch (final CloneNotSupportedException ex) {
-            return null;
+        return cloneReset();
+            } 
+        catch (final CloneNotSupportedException ex)
+        {
+        // Fall back to creating a safe copy using `super.clone()`
+        final StrTokenizer cloned = new StrTokenizer();
+        if (this.chars != null)
+        {
+            cloned.chars = this.chars.clone();
         }
+        cloned.reset();
+        return cloned;
     }
+
 
     /**
      * Creates a new instance of this Tokenizer. The new instance is reset so that
