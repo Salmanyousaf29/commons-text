@@ -255,6 +255,7 @@ public class LevenshteinDistance implements EditDistance<Integer> {
             n = m;
             m = right.length();
         }
+
         final int[] p = new int[n + 1];
         // indexes into strings left and right
         int i; // iterates through left
@@ -263,24 +264,35 @@ public class LevenshteinDistance implements EditDistance<Integer> {
         int upper;
         E rightJ; // jth character of right
         int cost; // cost
+
         for (i = 0; i <= n; i++) {
             p[i] = i;
         }
+
         for (j = 1; j <= m; j++) {
             upperLeft = p[0];
-            rightJ = right.at(j - 1);
+            rightJ = (j - 1 >= 0 && j - 1 < right.length()) ? right.at(j - 1) : null; // Safe access
             p[0] = j;
 
             for (i = 1; i <= n; i++) {
                 upper = p[i];
-                cost = left.at(i - 1).equals(rightJ) ? 0 : 1;
-                // minimum of cell to the left+1, to the top+1, diagonally left and up +cost
-                p[i] = Math.min(Math.min(p[i - 1] + 1, p[i] + 1), upperLeft + cost);
-                upperLeft = upper;
+                E leftChar = (i - 1 >= 0 && i - 1 < left.length()) ? left.at(i - 1) : null; // Safe access
+
+                cost = (leftChar != null && leftChar.equals(rightJ)) ? 0 : 1;
+
+        // minimum of cell to the left+1, to the top+1, diagonally left and up +cost
+                if (i - 1 >= 0 && i < p.length) {
+                    p[i] = Math.min(
+                    Math.min(p[i - 1] + 1, p[i] + 1),
+                    upperLeft + cost
+                );
             }
+            upperLeft = upper;
         }
+}
+
         return p[n];
-    }
+}
 
     /**
      * Threshold.
