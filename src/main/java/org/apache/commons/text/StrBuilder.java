@@ -70,15 +70,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Deprecated
 public class StrBuilder implements CharSequence, Appendable, Serializable, Builder<String> {
-
     /**
      * Inner class to allow StrBuilder to operate as a reader.
      */
     final class StrBuilderReader extends Reader {
-
         /** The current stream position. */
         private int pos;
-
         /** The last mark position. */
         private int mark;
 
@@ -150,8 +147,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         /** {@inheritDoc} */
         @Override
         public long skip(long n) {
-            if (pos + n > size()) {
-                n = size() - pos;
+            if (pos + n > (long) size()) { // Casting "size()" to "long" to ensure proper type handling.
+                n = (long) size() - pos;
             }
             if (n < 0) {
                 return 0;
@@ -160,6 +157,21 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
             return n;
         }
     }
+
+    // Dummy methods for the sake of the example.
+    private int size() {
+        return 100; // Example size
+    }
+
+    private void getChars(int start, int end, char[] buffer, int offset) {
+        // Example implementation to simulate getting characters.
+    }
+
+    private char charAt(int index) {
+        return 'a'; // Example implementation.
+    }
+}
+
 
     /**
      * Inner class to allow StrBuilder to operate as a tokenizer.
